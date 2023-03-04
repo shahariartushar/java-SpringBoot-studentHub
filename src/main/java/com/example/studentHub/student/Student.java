@@ -1,6 +1,8 @@
 package com.example.studentHub.student;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.Period;
 
 @Entity(name= "Student")
 @Table(
@@ -44,11 +46,15 @@ public class Student {
 
     )
     private String email;
+
     @Column(
-            name = "age",
+            name = "dob",
             nullable = false
     )
-    private Integer age;
+    private LocalDate dob;
+
+    @Transient
+    private int age;
 
     public Student() {
     }
@@ -56,11 +62,11 @@ public class Student {
     public Student(String firstName,
                    String lastName,
                    String email,
-                   Integer age) {
+                   LocalDate dob) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.age = age;
+        this.dob = dob;
     }
 
     public Long getId() {
@@ -95,12 +101,20 @@ public class Student {
         this.email = email;
     }
 
-    public Integer getAge() {
-        return age;
+    public int getAge() {
+        return Period.between(this.dob, LocalDate.now()).getYears();
     }
 
-    public void setAge(Integer age) {
+    public void setAge(int age) {
         this.age = age;
+    }
+
+    public LocalDate getDob() {
+        return dob;
+    }
+
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
     }
 
     @Override
@@ -110,6 +124,7 @@ public class Student {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", dob=" + dob +
                 ", age=" + age +
                 '}';
     }
